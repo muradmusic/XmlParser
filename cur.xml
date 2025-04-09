@@ -1,0 +1,11 @@
+<ExchangeRates>
+    <Currency code="USD">
+        <Rate>1.12</Rate>
+    </Currency>
+    <Currency code="EUR">
+        <Rate>1.00</Rate>
+    </Currency>
+    <Currency code="JPY">
+        <Rate>130.21</Rate>
+    </Currency>
+</ExchangeRates>
