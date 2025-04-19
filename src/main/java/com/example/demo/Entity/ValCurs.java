@@ -2,6 +2,7 @@ package com.example.demo.Entity;
 
 
 import jakarta.xml.bind.annotation.*;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -9,8 +10,7 @@ import java.util.List;
 
 @XmlRootElement(name = "ValCurs")
 @XmlAccessorType(XmlAccessType.FIELD)
-@Getter
-@Setter
+@Data
 public class ValCurs {
 
     @XmlAttribute(name = "Date")

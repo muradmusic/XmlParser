@@ -4,14 +4,14 @@ import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlAttribute;
 import jakarta.xml.bind.annotation.XmlElement;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.util.List;
 
 @XmlAccessorType(XmlAccessType.FIELD)
-@Getter
-@Setter
+@Data
 public class ValType {
 
     @XmlAttribute(name = "Type")
