@@ -1,14 +1,14 @@
 package com.example.demo;
 
+import com.example.demo.Entity.Parser;
 import com.example.demo.Entity.ValCurs;
 import com.example.demo.Entity.ValType;
 import com.example.demo.Entity.Valute;
-import jakarta.xml.bind.JAXBContext;
-import jakarta.xml.bind.Unmarshaller;
 import org.junit.jupiter.api.Test;
 
 import java.io.StringReader;
 import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 
@@ -31,12 +31,11 @@ public class ValCursTest {
             """;
 
     @Test
-    void testUnmarshalValCurs() throws Exception {
-        JAXBContext context = JAXBContext.newInstance(ValCurs.class);
-        Unmarshaller unmarshaller = context.createUnmarshaller();
+    void testParserValCurs() throws Exception {
 
         StringReader reader = new StringReader(xml);
-        ValCurs valCurs = (ValCurs) unmarshaller.unmarshal(reader);
+        //testing Parser class which is responsible for parsing xml
+        ValCurs valCurs = Parser.parse(reader);
 
         assertEquals("11.04.2025", valCurs.getDate());
         assertEquals("AZN məzənnələri", valCurs.getName());

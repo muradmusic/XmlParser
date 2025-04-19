@@ -1,18 +1,13 @@
 package com.example.demo;
 
 import com.example.demo.Entity.*;
-import jakarta.xml.bind.JAXBContext;
-import jakarta.xml.bind.Unmarshaller;
-
-import java.io.File;
+import java.io.FileReader;
 
 public class Main {
     public static void main(String[] args) {
         try {
-            JAXBContext context = JAXBContext.newInstance(ValCurs.class);
-            Unmarshaller unmarshaller = context.createUnmarshaller();
-
-            ValCurs valCurs = (ValCurs) unmarshaller.unmarshal(new File("az.xml"));
+            FileReader reader = new FileReader("az.xml");
+            ValCurs valCurs = Parser.parse(reader);
 
             for (ValType valType : valCurs.getValTypes()) {
                 System.out.println(valType.getType());

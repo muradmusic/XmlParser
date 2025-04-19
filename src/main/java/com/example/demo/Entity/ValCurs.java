@@ -3,8 +3,6 @@ package com.example.demo.Entity;
 
 import jakarta.xml.bind.annotation.*;
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 
 import java.util.List;
 
