@@ -8,6 +8,9 @@ import lombok.Data;
 
 import java.util.List;
 
+/*
+XML field
+ */
 @XmlAccessorType(XmlAccessType.FIELD)
 @Data
 public class ValType {

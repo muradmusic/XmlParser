@@ -6,6 +6,10 @@ import lombok.Data;
 
 import java.util.List;
 
+/*
+This is the root of Xml we are parsing
+and attributes, elements of this root.
+ */
 @XmlRootElement(name = "ValCurs")
 @XmlAccessorType(XmlAccessType.FIELD)
 @Data

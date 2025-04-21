@@ -11,7 +11,9 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-
+/**
+Tester class for {@link Parser} which converts Xml into {@link ValCurs} objects
+ */
 public class ValCursTest {
     private final String xml = """
             <ValCurs Date="11.04.2025" Name="AZN məzənnələri" Description="Test">
@@ -30,11 +32,11 @@ public class ValCursTest {
             </ValCurs>
             """;
 
+    //testing parse method of parser class which is responsible for parsing xml
     @Test
     void testParserValCurs() throws Exception {
 
         StringReader reader = new StringReader(xml);
-        //testing Parser class which is responsible for parsing xml
         ValCurs valCurs = Parser.parse(reader);
 
         assertEquals("11.04.2025", valCurs.getDate());
