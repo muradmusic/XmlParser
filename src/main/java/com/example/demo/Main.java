@@ -1,22 +1,24 @@
 package com.example.demo;
 
-import com.example.demo.Entity.Currency;
-import com.example.demo.Entity.ExchangeRates;
-import jakarta.xml.bind.JAXBContext;
-import jakarta.xml.bind.Unmarshaller;
+import com.example.demo.Entity.*;
+import java.io.FileReader;
 
-import java.io.File;
-
+/**
+This class reads "az.xml" file, parses it into a {@link ValCurs} object using {@link Parser} class
+ and prints the currency exchange info to the console.
+ */
 public class Main {
     public static void main(String[] args) {
         try {
-            JAXBContext context = JAXBContext.newInstance(ExchangeRates.class);
-            Unmarshaller unmarshaller = context.createUnmarshaller();
+            FileReader reader = new FileReader("az.xml");
+            ValCurs valCurs = Parser.parse(reader);
 
-            ExchangeRates exchangeRates = (ExchangeRates) unmarshaller.unmarshal(new File("cur.xml"));
-
-            for (Currency currency : exchangeRates.getCurrencies()) {
-                System.out.println(currency.getCode() + ": " + currency.getRate());
+            for (ValType valType : valCurs.getValTypes()) {
+                System.out.println(valType.getType());
+                for (Valute valute : valType.getValutes()) {
+                    System.out.println(valute.getCode() + ": Nominal " + valute.getNominal() + ": " + valute.getName() + ": " + valute.getValue());
+                }
+                System.out.println();
             }
 
         } catch (Exception e) {
