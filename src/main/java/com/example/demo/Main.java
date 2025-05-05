@@ -1,7 +1,8 @@
 package com.example.demo;
 
 import com.example.demo.Entity.*;
-import java.io.FileReader;
+import java.io.InputStream;
+import java.net.URL;
 
 /**
 This class reads "az.xml" file, parses it into a {@link ValCurs} object using {@link Parser} class
@@ -10,8 +11,10 @@ This class reads "az.xml" file, parses it into a {@link ValCurs} object using {@
 public class Main {
     public static void main(String[] args) {
         try {
-            FileReader reader = new FileReader("az.xml");
-            ValCurs valCurs = Parser.parse(reader);
+            //endpoint of Central Bank of Azerbaijan with appended current date
+            String URL = UrlGenerator.generateTodayUrl();
+            InputStream stream = new URL(URL).openStream();
+            ValCurs valCurs = Parser.parse(stream);
 
             for (ValType valType : valCurs.getValTypes()) {
                 System.out.println(valType.getType());

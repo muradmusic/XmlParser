@@ -3,6 +3,7 @@ package com.example.demo.Entity;
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.Unmarshaller;
 
+import java.io.InputStream;
 import java.io.Reader;
 
 /*
@@ -20,4 +21,13 @@ separately.
         Unmarshaller unmarshaller = context.createUnmarshaller();
         return (ValCurs) unmarshaller.unmarshal(reader);
     }
+
+    //this method was later added to support stream object
+    public static ValCurs parse(InputStream stream) throws Exception {
+        JAXBContext context = JAXBContext.newInstance(ValCurs.class);
+        Unmarshaller unmarshaller = context.createUnmarshaller();
+        return (ValCurs) unmarshaller.unmarshal(stream);
+    }
 }
+
+
