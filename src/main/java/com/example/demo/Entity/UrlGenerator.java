@@ -7,7 +7,7 @@ import java.time.format.DateTimeFormatter;
 public class UrlGenerator {
 
     //generate string from LocalDate with today's date
-    public static String generateTodayUrl() {
+    public static String generateUrlByDate() {
         LocalDate today = LocalDate.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
         String formattedDate = today.format(formatter);

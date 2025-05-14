@@ -4,8 +4,12 @@ import com.example.demo.Entity.*;
 
 import java.io.InputStream;
 import java.net.URL;
+import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
 
 /**
@@ -17,11 +21,21 @@ public class Main {
         try {
             System.out.print("PLease Enter date in format (dd.MM.yyyy): ");
             Scanner scanner = new Scanner(System.in);
-            String dateInput = scanner.nextLine();
+            String dateInput;
 
             // Parse date
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
-            LocalDate date = LocalDate.parse(dateInput, formatter);
+            LocalDate date;
+
+            while(true) {
+                dateInput = scanner.nextLine();
+                try {
+                    date = LocalDate.parse(dateInput, formatter);
+                    break;
+                } catch (DateTimeException e) {
+                    System.out.println("Invalid date. Try again. ");
+                }
+            }
 
             //endpoint of Central Bank of Azerbaijan with appended selected date
             String URL = UrlGenerator.generateUrlByDate(date);
@@ -33,19 +47,24 @@ public class Main {
             Scanner scanner1 = new Scanner(System.in);
             String filter = scanner1.nextLine().trim().toLowerCase();
 
-            //lists all currency codes... not sure if this is necessary
-//            for (ValType valType: valCurs.getValTypes()){
-//                for(Valute valute : valType.getValutes()){
-//                    System.out.println(valute.getCode());
-//                }
-//            }
 
-            for (ValType valType : valCurs.getValTypes()) {
-                for (Valute valute : valType.getValutes()) {
-                    if (valute.getCode().equalsIgnoreCase(filter)) {
-                        System.out.println(valute.getCode() + ": Nominal " + valute.getNominal() + ": " + valute.getName() + ": " + valute.getValue());
-                    }
+            Map<String, Valute> currencyMap = new HashMap<>();
+
+            for(ValType valType : valCurs.getValTypes()){
+                for(Valute valute : valType.getValutes()){
+                    currencyMap.put(valute.getCode().toUpperCase(), valute);
                 }
+            }
+            Valute result = currencyMap.get(filter.toUpperCase());
+
+            if(result != null){
+                System.out.println(result.getCode() + ": Nominal " +
+                        result.getNominal() + ": " +
+                        result.getName() + ": " +
+                        result.getValue());
+            }
+            else {
+                System.out.println("No matching currency code found.");
             }
         } catch (Exception e) {
             e.printStackTrace();
