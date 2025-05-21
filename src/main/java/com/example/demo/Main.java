@@ -41,11 +41,11 @@ public class Main {
             String URL = UrlGenerator.generateUrlByDate(date);
             InputStream stream = new URL(URL).openStream();
             ValCurs valCurs = Parser.parse(stream);
+            stream.close();
 
             //selecting currency code
             System.out.println("Please Select Currency Code: ");
-            Scanner scanner1 = new Scanner(System.in);
-            String filter = scanner1.nextLine().trim().toLowerCase();
+            String filter = scanner.nextLine().trim().toLowerCase();
 
 
             Map<String, Valute> currencyMap = new HashMap<>();
