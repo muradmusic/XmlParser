@@ -2,6 +2,7 @@ package com.example.demo;
 
 import com.example.demo.Entity.*;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.time.DateTimeException;
@@ -39,9 +40,14 @@ public class Main {
 
             //endpoint of Central Bank of Azerbaijan with appended selected date
             String URL = UrlGenerator.generateUrlByDate(date);
-            InputStream stream = new URL(URL).openStream();
-            ValCurs valCurs = Parser.parse(stream);
-            stream.close();
+            ValCurs valCurs = null;
+            try(InputStream stream = new URL(URL).openStream()){
+                 valCurs = Parser.parse(stream);
+            }
+            catch (IOException e){
+                System.err.println("Error while opening stream: " + e.getMessage());
+
+            }
 
             //selecting currency code
             System.out.println("Please Select Currency Code: ");
@@ -50,11 +56,14 @@ public class Main {
 
             Map<String, Valute> currencyMap = new HashMap<>();
 
-            for(ValType valType : valCurs.getValTypes()){
-                for(Valute valute : valType.getValutes()){
-                    currencyMap.put(valute.getCode().toUpperCase(), valute);
+            if (valCurs != null) {
+                for(ValType valType : valCurs.getValTypes()){
+                    for(Valute valute : valType.getValutes()){
+                        currencyMap.put(valute.getCode().toUpperCase(), valute);
+                    }
                 }
             }
+
             Valute result = currencyMap.get(filter.toUpperCase());
 
             if(result != null){
