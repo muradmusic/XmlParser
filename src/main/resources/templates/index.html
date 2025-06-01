@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Currency Info</title>
+    <meta charset="UTF-8">
+    <style>
+        body {
+            font-family: sans-serif;
+            margin: 40px;
+            background-color: #f7f7f7;
+        }
+        form {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            width: 300px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        input, button {
+            width: 100%;
+            padding: 8px;
+            margin-top: 8px;
+            margin-bottom: 12px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+        }
+        h2 {
+            color: #333;
+        }
+        .result, .error {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 6px;
+        }
+        .result {
+            background-color: #e0f7e9;
+            border: 1px solid #3c763d;
+        }
+        .error {
+            background-color: #fcebea;
+            border: 1px solid #a94442;
+            color: #a94442;
+        }
+    </style>
+</head>
+<body>
+
+<h2>Currency Exchange Info</h2>
+
+<form th:action="@{/currency}" method="get">
+    <label for="date">Date (dd.MM.yyyy):</label>
+    <input type="text" id="date" name="date" placeholder="e.g. 23.05.2024" />
+
+    <label for="code">Currency Code (e.g. USD):</label>
+    <input type="text" id="code" name="code" placeholder="e.g. USD" />
+
+    <button type="submit">Get Info</button>
+</form>
+
+<div th:if="${valute != null}" class="result">
+    <h4>Result:</h4>
+    <p><strong>Date:</strong> <span th:text="${date}"></span></p>
+    <p><strong>Code:</strong> <span th:text="${valute.code}"></span></p>
+    <p><strong>Name:</strong> <span th:text="${valute.name}"></span></p>
+    <p><strong>Nominal:</strong> <span th:text="${valute.nominal}"></span></p>
+    <p><strong>Value:</strong> <span th:text="${valute.value}"></span></p>
+</div>
+
+<div th:if="${error != null}" class="error">
+    <p th:text="${error}"></p>
+</div>
+
+</body>
+</html>
