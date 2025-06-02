@@ -4,15 +4,17 @@ import com.example.demo.Entity.Parser;
 import com.example.demo.Entity.ValCurs;
 import com.example.demo.Entity.ValType;
 import com.example.demo.Entity.Valute;
+import com.example.demo.Service.CurrencyService;
 import org.junit.jupiter.api.Test;
-
 import java.io.StringReader;
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
-Tester class for {@link Parser} which converts Xml into {@link ValCurs} objects
+ * Tester class for {@link Parser} which converts Xml into {@link ValCurs} objects
  */
 public class ValCursTest {
     private final String xml = """
@@ -70,5 +72,28 @@ public class ValCursTest {
         assertEquals("1", eur.getNominal());
         assertEquals("Euro", eur.getName());
         assertEquals(1.9, eur.getValue(), 0.0001);
+    }
+
+    @Test
+    public void testBuildCurrencyMap() {
+        Valute usd = new Valute("USD", "US Dollar", "1", 1.7);
+        ValType valType = new ValType();
+        valType.setValutes(List.of(usd));
+
+        ValCurs valCurs = new ValCurs();
+        valCurs.setValTypes(List.of(valType));
+
+        Map<String, Valute> result = CurrencyService.generateCurrencyMap(valCurs);
+        assertEquals(1, result.size());
+        assertTrue(result.containsKey("USD"));
+        assertEquals("US Dollar", result.get("USD").getName());
+    }
+
+    @Test
+    public void testFetchValCursByDate_valid() throws Exception {
+        LocalDate date = LocalDate.of(2024, 5, 20);
+        ValCurs valCurs = CurrencyService.fetchValCursByDate(date);
+        assertNotNull(valCurs);
+        assertFalse(valCurs.getValTypes().isEmpty());
     }
 }
