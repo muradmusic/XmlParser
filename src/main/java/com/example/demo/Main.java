@@ -1,15 +1,10 @@
 package com.example.demo;
 
 import com.example.demo.Entity.*;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
+import com.example.demo.Service.CurrencyService;
 import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
@@ -37,32 +32,15 @@ public class Main {
                     System.out.println("Invalid date. Try again. ");
                 }
             }
-
-            //endpoint of Central Bank of Azerbaijan with appended selected date
-            String URL = UrlGenerator.generateUrlByDate(date);
-            ValCurs valCurs = null;
-            try(InputStream stream = new URL(URL).openStream()){
-                 valCurs = Parser.parse(stream);
-            }
-            catch (IOException e){
-                System.err.println("Error while opening stream: " + e.getMessage());
-
-            }
+            //fetching appropriate valcurs by the entered date
+            ValCurs valCurs = CurrencyService.fetchValCursByDate(date);
 
             //selecting currency code
             System.out.println("Please Select Currency Code: ");
             String filter = scanner.nextLine().trim().toLowerCase();
 
-
-            Map<String, Valute> currencyMap = new HashMap<>();
-
-            if (valCurs != null) {
-                for(ValType valType : valCurs.getValTypes()){
-                    for(Valute valute : valType.getValutes()){
-                        currencyMap.put(valute.getCode().toUpperCase(), valute);
-                    }
-                }
-            }
+            //map storing valcurs by valute codes
+            Map<String, Valute> currencyMap = CurrencyService.generateCurrencyMap(valCurs);
 
             Valute result = currencyMap.get(filter.toUpperCase());
 

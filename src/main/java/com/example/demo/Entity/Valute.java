@@ -13,6 +13,9 @@ XML field
 @Data
 public class Valute {
 
+    public Valute() {
+    }
+
     @XmlAttribute(name = "Code")
     private String code;
 
@@ -24,4 +27,13 @@ public class Valute {
 
     @XmlElement(name = "Value")
     private double value;
+
+
+    public Valute(String code, String name, String nominal, double value) {
+        this.code = code;
+        this.name = name;
+        this.nominal = nominal;
+        this.value = value;
+    }
+
 }
