@@ -1,29 +1,58 @@
 package com.example.demo;
 
 import com.example.demo.Entity.*;
-import java.io.InputStream;
-import java.net.URL;
+import com.example.demo.Service.CurrencyService;
+import java.time.DateTimeException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Map;
+import java.util.Scanner;
 
 /**
-This class reads "az.xml" file, parses it into a {@link ValCurs} object using {@link Parser} class
- and prints the currency exchange info to the console.
+ * This class reads XML file, parses it into a {@link ValCurs} object using {@link Parser} class
+ * and prints the currency exchange info to the console.
  */
 public class Main {
     public static void main(String[] args) {
         try {
-            //endpoint of Central Bank of Azerbaijan with appended current date
-            String URL = UrlGenerator.generateTodayUrl();
-            InputStream stream = new URL(URL).openStream();
-            ValCurs valCurs = Parser.parse(stream);
+            System.out.print("PLease Enter date in format (dd.MM.yyyy): ");
+            Scanner scanner = new Scanner(System.in);
+            String dateInput;
 
-            for (ValType valType : valCurs.getValTypes()) {
-                System.out.println(valType.getType());
-                for (Valute valute : valType.getValutes()) {
-                    System.out.println(valute.getCode() + ": Nominal " + valute.getNominal() + ": " + valute.getName() + ": " + valute.getValue());
+            // Parse date
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+            LocalDate date;
+
+            while(true) {
+                dateInput = scanner.nextLine();
+                try {
+                    date = LocalDate.parse(dateInput, formatter);
+                    break;
+                } catch (DateTimeException e) {
+                    System.out.println("Invalid date. Try again. ");
                 }
-                System.out.println();
             }
+            //fetching appropriate valcurs by the entered date
+            ValCurs valCurs = CurrencyService.fetchValCursByDate(date);
 
+            //selecting currency code
+            System.out.println("Please Select Currency Code: ");
+            String filter = scanner.nextLine().trim().toLowerCase();
+
+            //map storing valcurs by valute codes
+            Map<String, Valute> currencyMap = CurrencyService.generateCurrencyMap(valCurs);
+
+            Valute result = currencyMap.get(filter.toUpperCase());
+
+            if(result != null){
+                System.out.println(result.getCode() + ": Nominal " +
+                        result.getNominal() + ": " +
+                        result.getName() + ": " +
+                        result.getValue());
+            }
+            else {
+                System.out.println("No matching currency code found.");
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
